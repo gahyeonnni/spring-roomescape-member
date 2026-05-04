@@ -33,5 +33,4 @@ public class ReservationTime {
     public LocalTime getFinishAt() {
         return finishAt;
     }
-
 }
