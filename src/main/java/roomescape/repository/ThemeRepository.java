@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.Theme;
 
+import java.time.Duration;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,16 +29,22 @@ public class ThemeRepository {
             resultSet.getLong("id"),
             resultSet.getString("name"),
             resultSet.getString("description"),
-            resultSet.getString("image_url")
+            resultSet.getString("image_url"),
+            resultSet.getTime("start_at").toLocalTime(),
+            resultSet.getTime("finish_at").toLocalTime(),
+            Duration.ofHours(resultSet.getLong("play_time"))
     );
 
     public Theme save(Theme theme) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("name", theme.getName())
                 .addValue("description", theme.getDescription())
-                .addValue("image_url", theme.getImageUrl());
+                .addValue("image_url", theme.getImageUrl())
+                .addValue("start_at", theme.getStartAt())
+                .addValue("finish_at", theme.getFinishAt())
+                .addValue("play_time", theme.getPlayTime());
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-        return Theme.of(id, theme.getName(), theme.getDescription(), theme.getImageUrl());
+        return Theme.of(id, theme.getName(), theme.getDescription(), theme.getImageUrl(), theme.getStartAt(), theme.getFinishAt(), theme.getPlayTime());
     }
 
     public void deleteById(Long id) {
