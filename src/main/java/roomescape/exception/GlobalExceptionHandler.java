@@ -62,7 +62,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
             MissingServletRequestParameterException e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         log.warn("필수 파라미터 누락: {}", e.getParameterName());
-        return ResponseEntity.badRequest().body(new ErrorResponse("INVALID_INPUT", "필수 요청 파라미터가 누락됐습니다."));
+        return ResponseEntity.badRequest().body(new ErrorResponse("INVALID_INPUT", e.getParameterName() + " 파라미터가 누락됐습니다."));
     }
 
     @Override
